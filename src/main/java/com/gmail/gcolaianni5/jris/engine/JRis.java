@@ -273,7 +273,7 @@ public class JRis {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param line
 	 * @param lastParsed
 	 * @param record
@@ -288,7 +288,7 @@ public class JRis {
 			mappedField = TAG_METHOD_DICTIONARY.get(code);
 			if (mappedField != null) {
 				executeSetReflection(record, line, code, mappedField.getMethod(), mappedField.getClazz());
-			} else if (lastParsed.equals(AB)) {
+			} else if (lastParsed != null && lastParsed.equals(AB)) {
 				code = AB;
 				mappedField = TAG_METHOD_DICTIONARY.get(code);
 				executeSetReflection(record, line, code, mappedField.getMethod(), mappedField.getClazz());
@@ -317,15 +317,26 @@ public class JRis {
 				Record temp = new Record();
 				String line = null;
 				String lastCode = null;
+                String lineAcc = "";
 
-				while ((line = br.readLine()) != null) {
-					if (line.startsWith(ER)) {
-						result.add(temp);
-						temp = new Record();
-					} else {
-						lastCode = lineParser(line.trim(), lastCode, temp);
-					}
-				}
+                while ((line = br.readLine()) != null) {
+                    if (line.length() > 0 && line.charAt(0) == 0xFEFF) {
+                        line = line.substring(1);
+                    }
+                    if (line.startsWith(ER)) {
+                        lastCode = lineParser(lineAcc, lastCode, temp);
+                        lineAcc = "";
+                        result.add(temp);
+                        temp = new Record();
+                    } else {
+                        if (line.length() > 2 && TAG_METHOD_DICTIONARY.containsKey(line.substring(0, 2))) {
+                            lastCode = lineParser(lineAcc, lastCode, temp);
+                            lineAcc = line.trim();
+                        } else {
+                            lineAcc = (lineAcc + " " + line).trim();
+                        }
+                    }
+                }
 
 			} finally {
 				if (br != null) {

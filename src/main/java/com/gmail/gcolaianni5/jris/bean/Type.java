@@ -132,6 +132,7 @@ public enum Type {
 	/**
 	 * Web Page.
 	 */
+	WEB,
 	ELEC,
 	
 	/**

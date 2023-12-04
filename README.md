@@ -9,5 +9,3 @@ From [Wikipiedia](https://en.wikipedia.org/wiki/RIS_(file_format)):
 The following examples inlustrates how to use JRis to parse and to build RIS format stream.
 * To parse a RIS stream you could use one of the `Jris.parse()` methods. Each one accepts as argument a different type of Reader, and will return a `List<Record>` of records. Each record is a single RIS element parsed from the stream.
 * To build a RIS stream you could use one of the `Jris.build()` methods. Each one accepts as arguments a `List<Record>` from which the RIS stream will be generated and a different type of Writer in which the stream will be write.
-
-Hallo test.
